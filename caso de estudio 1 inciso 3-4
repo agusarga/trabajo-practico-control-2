@@ -1,0 +1,35 @@
+% Caso de estudio 1: Tercer y cuarto apartado
+% 
+% En el archivo Curvas_Medidas_RLC.xls (datos en la hoja 1 y etiquetas en la hoja 2)
+% encontrarán las series de datos que deberían emplear para deducir los valores de R, L y
+% C del circuito. Emplear el método de la respuesta al escalón, tomando como salida la
+% tensión en el capacitor.
+
+clear all; 
+clc;
+
+% se importan los datos desde el Excel
+I = xlsread('Curvas_Medidas_RLC', 'B1:B1001');
+Vc = xlsread('Curvas_Medidas_RLC', 'C1:C1001');
+Vin = xlsread('Curvas_Medidas_RLC', 'D1:D1001');% agrego una nueva columna con valores
+                                                % de la entrada (0, 12 y -12)
+
+% en command window pongo 'systemIdentification' y agrego la entrada Vin y salida I
+% estimar modelo con un cero y dos polos, se logra exactitud de 94.8%
+
+% la función anterior me arroja los ceros y los polos, los copio en el
+% código
+num= [12.72 0];
+den= [1  2803  5.774e05];
+ 
+Is=tf(num,den)
+ 
+% en command window pongo 'systemIdentification' y agrego la entrada Vin y salida Vc 
+% estimar modelo con dos polos y sin ceros, se logra exactitud de 99.84%
+ 
+% la función anterior me arroja los ceros y los polos, los copio en el
+% código
+num2= [5.823e05];
+den2= [1 2762 5.823e05];
+ 
+Vcs=tf(num2,den2)
