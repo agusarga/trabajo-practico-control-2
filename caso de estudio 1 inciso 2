@@ -1,0 +1,39 @@
+% Caso de estudio 1: Segundo apartado
+% 
+% Asignar valores a R=5,6KOhm, L=10uHy, y C=100nF; repetir lo anterior para comparar el
+% resultado y verificar la correcta simulación.
+
+clear all;
+clc;
+%Asignación de los valores de R, L y C
+R=4700;
+L=10*10^-6;
+C=100*10^-9;
+
+R2=5600;
+L2=10*10^-6;
+C2=100*10^-9;
+
+%Construcción de matrices según los coeficientes del circuito
+MatA=[-R/L -1/L;1/C 0];
+MatB=[1/L;0];
+MatC=[R 0];
+MatD=[0];
+
+MatA2=[-R2/L2 -1/L2;1/C2 0];
+MatB2=[1/L2;0];
+MatC2=[R2 0];
+MatD2=[0];
+
+%funcion que utiliza las matrices para llevarlas a la ec. de estados
+sys1=ss(MatA,MatB,MatC,MatD);
+
+sys2=ss(MatA2,MatB2,MatC2,MatD2);
+
+%creación de un tren de pulsos que va de 12 a -12 cada 1 ms
+A=12; Fs=1e9; f=500; T=2*(1/f); c=50; 
+t=0:1/Fs:T-1/Fs; u=A*square(2*pi*f*t,c);
+
+%grafica el sistema de acuerdo a la entrada de pulsos y se comparan
+%los resultados
+lsim(sys1, sys2, u, t)
