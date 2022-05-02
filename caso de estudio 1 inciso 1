@@ -1,0 +1,29 @@
+% Caso de estudio 1: Primer apartado
+% 
+% Asignar valores a R=4,7KOhm, L=10uHy, y C=100nF. Obtener simulaciones que
+% permitan estudiar la dinámica del sistema, con una entrada de tensión escalón de 12V,
+% que cada 1ms cambia de signo.
+
+clear all;
+clc;
+
+%Asignación de los valores de R, L y C
+R=4700;
+L=10*10^-6;
+C=100*10^-9;
+
+%Construcción de matrices según los coeficientes del circuito
+MatA=[-R/L -1/L;1/C 0];
+MatB=[1/L;0];
+MatC=[R 0];
+MatD=[0];
+
+%funcion que utiliza las matrices para llevarlas a la ec. de estados
+sys1=ss(MatA,MatB,MatC,MatD); 
+
+%creación de un tren de pulsos que va de 12 a -12 cada 1 ms
+A=12; Fs=1e9; f=500; T=2*(1/f); c=50; 
+t=0:1/Fs:T-1/Fs; u=A*square(2*pi*f*t,c);
+
+%grafica el sistema de acuerdo a la entrada de pulsos
+lsim(sys1, u, t)
