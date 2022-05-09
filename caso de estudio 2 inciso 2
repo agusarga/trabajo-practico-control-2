@@ -1,0 +1,51 @@
+% Caso de estudio 2: Segundo apartado
+% 
+% Mostrar simulaciones de 5 segundos que permitan observar la corriente ia en todo
+% momento y establecer su valor máximo como para dimensionar dispositivos
+% electrónicos.
+
+clear;close all; clc;
+
+X=-[0; 0; 0; 0]; %valores iniciales
+ii=0;t_etapa=1e-7;wRef=2;tF=5;
+Tl=0;
+color_='r';
+
+for t=0:t_etapa:tF
+ if t==2
+    Tl=0.0014
+ end   
+ ii=ii+1;k=ii+2;
+ X=modmotor(t_etapa, X, 12, Tl);
+ 
+ x1(ii)=X(1);%Omega
+ x2(ii)=X(2);%wp
+ x3(ii)=X(3);%corriente
+ acc(ii)=12;
+end
+
+t=0:t_etapa:tF;
+subplot(3,1,1);hold on;
+plot(t,x1,color_);title('Salida y, \omega_t');
+subplot(3,1,2);hold on;
+plot(t,acc,color_);title('Entrada u_t, v_a');
+subplot(3,1,3);hold on;
+plot(t,x3,color_);title('Corriente');
+xlabel('Tiempo [Seg.]');
+
+function [X]=modmotor(t_etapa, xant, accion, Tl)
+Laa=366e-6; J=5e-9;Ra=55.6;B=0;Ki=6.49e-3;Km=6.53e-3;
+Va=accion;
+h=1e-7;
+omega= xant(1);
+wp = xant(2);
+ia = xant(3);
+ip = xant(4);
+for ii=1:t_etapa/h
+ ip = -Ra/Laa*ia - Km/Laa*omega+Va/Laa;
+ ia = ia + h*ip;
+ wp = Ki/J * ia - B/J*omega - Tl/J;
+ omega = omega + h*wp;
+end
+X=[omega,wp, ia, ip];
+end
