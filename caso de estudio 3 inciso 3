@@ -1,0 +1,48 @@
+% Caso de estudio 3: 
+
+% Obtener la solución numérica del sistema lineal para c=50 m/s, (es decir,
+% 180Km/h), deltaT=10^-3; y el tiempo de simulación de 20 segundos.
+
+clear all;
+clc;
+
+% Declaración de constantes del sistema
+w = 2;
+a = 0.05;
+b = 5;
+c = 50;
+
+% Constantes temporales
+deltaT = 1e-3;
+tiempo = (20/deltaT); % 20 segundos
+t=0:deltaT:(tiempo*deltaT);
+h=0:deltaT:tiempo*deltaT;
+u=linspace(0,0,tiempo+1);
+
+% Condiciones iniciales
+% x = [alfa(i); fi(i); fi_p(i); h(i)]
+alfa(1)=0; fi(1)=0; fi_p(1)=0; h(1)=0;
+
+% Versión linealizada
+Mat_A=[-a a 0 0;0 0 1 0; w^2 -w^2 0 0; c 0 0 0]
+Mat_B=[0; 0; b*w^2; 0]
+X0=[0 0 0 0]';x=[0.1 0 0 1000]';
+
+u(1)=0.1; i=1;
+
+% Euler
+while(i<(tiempo+2))
+ %Variables del sistema no lineal
+ u(i)=.1;
+ 
+ alfa(i)=x(1); fi(i)=x(2);fi_p(i)=x(3);h(i)=x(4);
+
+ xp=Mat_A*(x-X0)+Mat_B*u(i);
+ x=x+deltaT*xp;
+ i=i+1;
+end
+
+% Gráficos
+figure(1);hold on;
+plot(t,h,'b');grid on; title('Altura del avión');
+xlabel('Tiempo en Seg.');hold on;
