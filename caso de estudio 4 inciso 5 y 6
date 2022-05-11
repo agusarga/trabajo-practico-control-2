@@ -13,7 +13,7 @@ m = 0.5;
 long = 12;
 
 Fricc = 0.1; g = 9.8; M = 0.5;
-h = 1e-4; tiempo = (1/h);% el tiempo será de 2 segundos para apreciar diferencias
+h = 1e-4; tiempo = (10/h);% el tiempo será de 2 segundos para apreciar diferencias
 p_pp = 0; tita_pp = 0;
 t=0:h:tiempo*h;
 p_p=0:h:tiempo*h;
@@ -21,7 +21,7 @@ u=linspace(0,0,tiempo+1);
 
 % Condiciones iniciales
 % x = [p(i); p_p(i); alfa(i); omega(i)]
-p(1)=0; p_p(1)=0; alfa(1)=0.5; omega(1)=0;
+p(1)=0; p_p(1)=0; alfa(1)=pi-0.3; omega(1)=0;
 
 color='c';
 u(1)=0; i=1;
